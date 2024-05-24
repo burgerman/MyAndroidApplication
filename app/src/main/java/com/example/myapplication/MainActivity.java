@@ -1,7 +1,10 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,48 +13,64 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
+    private static final String ACTIVITY_NAME = "MainActivity";
+    private static final int REQUEST_CODE = 10;
+
+    private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
-        EdgeToEdge.enable(this);
+        Log.i(ACTIVITY_NAME, "onCreate");
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        button = findViewById(R.id.button2);
+        button.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, ListItemsActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                String messagePassed = data.getStringExtra("Response");
+                if (messagePassed != null) {
+                    String toastMessage = "ListItemsActivity passed: " + messagePassed;
+                    Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+            Log.i(ACTIVITY_NAME, "Returned to MainActivity.onActivityResult");
+        }
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume");
+        Log.i(ACTIVITY_NAME, "onResume");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i(TAG, "onStart");
+        Log.i(ACTIVITY_NAME, "onStart");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause");
+        Log.i(ACTIVITY_NAME, "onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i(TAG, "onStop");
+        Log.i(ACTIVITY_NAME, "onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy");
+        Log.i(ACTIVITY_NAME, "onDestroy");
     }
 }

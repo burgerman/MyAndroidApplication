@@ -10,4 +10,8 @@
     <string name="checkbox">CheckBox</string>
     <string name="switch1">Switch</string>
     <string name="buttonLogin">Login Button</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_message">End activity?</string>
+    <string name="dialog_title">Finish Activity</string>
 </resources>
