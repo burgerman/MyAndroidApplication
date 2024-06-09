@@ -67,10 +67,14 @@ public class LoginActivity extends AppCompatActivity {
         } else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
             viewError.setText("Invalid email address");
             viewError.setVisibility(View.VISIBLE);
+        } else if(Patterns.EMAIL_ADDRESS.matcher(username).matches()){
             saveLoginEmail();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            viewError.setText("No response");
+            viewError.setVisibility(View.VISIBLE);
         }
     }
 
