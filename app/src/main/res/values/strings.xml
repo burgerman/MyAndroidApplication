@@ -2,6 +2,7 @@
     <string name="app_name">Assignment 2</string>
     <string name="hello_message">你好!</string>
     <string name="buttonText">我是一个按钮</string>
+    <string name="buttonText2">开始聊天</string>
     <string name="login">登录</string>
     <string name="password">密码</string>
     <string name="login_hint">登录名</string>
@@ -13,4 +14,5 @@
     <string name="cancel">取消</string>
     <string name="dialog_message">结束对话吗?</string>
     <string name="dialog_title">结束会话</string>
+    <string name="send">发送</string>
 </resources>

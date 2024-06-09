@@ -7,14 +7,17 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 public class ListItemsActivity extends AppCompatActivity {
     private static final String ACTIVITY_NAME = "ListItemsActivity";
@@ -28,6 +31,11 @@ public class ListItemsActivity extends AppCompatActivity {
         Log.i(ACTIVITY_NAME, "onCreate");
         print("Call onCreate");
         setContentView(R.layout.activity_list_items);
+        ActionBar actionBar = getSupportActionBar();
+        if(getSupportActionBar() != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         setTitle("List Items Activity");
         imageButton = findViewById(R.id.imageButton);
         mySwitch = findViewById(R.id.switch1);
@@ -46,7 +54,18 @@ public class ListItemsActivity extends AppCompatActivity {
                 showFinishDialog();
             }
         });
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private void setOnCheckedChanged(boolean isChecked) {

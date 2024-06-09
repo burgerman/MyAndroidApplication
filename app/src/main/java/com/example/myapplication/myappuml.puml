@@ -1,0 +1,100 @@
+@startuml
+class LoginActivity extends AppCompatActivity {
+    - static final String ACTIVITY_NAME = "LoginActivity"
+    - static final String PREFS_NAME = "LocalPrefs"
+    - EditText editTextLoginName
+    - EditText editTextPassword
+    - Button login_button
+    - EditText emailAdd
+    - TextView viewError
+
+    + EditText getEditTextLoginName()
+    + void setEditTextLoginName(String loginName)
+    + EditText getEditTextPassword()
+    + void setEditTextPassword(String textPassword)
+    + void onCreate(Bundle savedInstanceState)
+    + void handleLogin()
+    + void saveLoginEmail()
+    + void onResume()
+    + void onStart()
+    + void onPause()
+    + void onStop()
+    + void onDestroy()
+}
+
+class MainActivity extends AppCompatActivity {
+    - static final String ACTIVITY_NAME = "MainActivity"
+    - static final int REQUEST_CODE = 10
+    - Intent intent
+    - Button button
+    - Button button2
+
+    + void onCreate(Bundle savedInstanceState)
+    + void onActivityResult(int requestCode, int resultCode, Intent data)
+    + void onResume()
+    + void onStart()
+    + void onPause()
+    + void onStop()
+    + void onDestroy()
+}
+
+class ListItemsActivity extends AppCompatActivity {
+    - static final String ACTIVITY_NAME = "ListItemsActivity"
+    - static final int REQUEST_IMAGE = 1
+    - ImageButton imageButton
+    - Switch mySwitch
+    - CheckBox checkBox
+
+    + void onCreate(Bundle savedInstanceState)
+    + boolean onOptionsItemSelected(MenuItem item)
+    - void setOnCheckedChanged(boolean isChecked)
+    - void print(String message)
+    - void showFinishDialog()
+    + void onActivityResult(int requestCode, int resultCode, Intent data)
+    + void onResume()
+    + void onStart()
+    + void onPause()
+    + void onStop()
+    + void onDestroy()
+}
+
+class ChatWindow extends AppCompatActivity {
+    - static final String ACTIVITY_NAME = "ChatWindow"
+    - ListView listView
+    - EditText textInput
+    - Button sendButton
+    - ArrayList<String> msgs
+    - ChatAdapter chatAdapter
+
+    + ListView getListView()
+    + void setListView(ListView listView)
+    + EditText getTextInput()
+    + void setTextInput(EditText textInput)
+    + Button getSendButton()
+    + void setSendButton(Button sendButton)
+    + ArrayList<String> getMsgs()
+    + void setMsgs(ArrayList<String> msgs)
+    + ChatAdapter getChatAdapter()
+    + void setChatAdapter(Context context)
+    + void onCreate(Bundle savedInstanceState)
+    + boolean onOptionsItemSelected(MenuItem item)
+    - void print(String message)
+    + void onResume()
+    + void onStart()
+    + void onPause()
+    + void onStop()
+    + void onDestroy()
+}
+
+class ChatAdapter extends ArrayAdapter<String> {
+    - Context context
+    - ArrayList<String> messages
+
+    + ChatAdapter(Context ctx)
+    + int getCount()
+    + String getItem(int position)
+    + View getView(int position, View convertView, ViewGroup parent)
+}
+
+ChatWindow "1" *-- "1" ChatAdapter
+@enduml

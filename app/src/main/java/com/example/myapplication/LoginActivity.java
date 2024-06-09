@@ -1,11 +1,8 @@
 package com.example.myapplication;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -14,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.regex.Pattern;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -25,6 +24,19 @@ public class LoginActivity extends AppCompatActivity {
     private Button login_button;
     private EditText emailAdd;
     private TextView viewError;
+
+
+    public void setEditTextLoginName(String loginName) {
+        this.editTextLoginName.setText(loginName);
+    }
+
+    public void setEditTextPassword(String textPassword) {
+        this.editTextPassword.setText(textPassword);
+    }
+
+    public TextView getViewError() {
+        return viewError;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +57,16 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(ACTIVITY_NAME, "onCreate");
     }
 
-    private void handleLogin() {
+    protected void handleLogin() {
         String username = editTextLoginName.getText().toString();
         String password = editTextPassword.getText().toString();
 
-        if (username.isEmpty() || password.isEmpty() || username == null ||password == null ) {
-            viewError.setText("Either username or password can't be empty/null");
+        if (username.isEmpty() || password.isEmpty()) {
+            viewError.setText("Either username or password can't be empty");
             viewError.setVisibility(View.VISIBLE);
         } else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
             viewError.setText("Invalid email address");
             viewError.setVisibility(View.VISIBLE);
-        } else {
             saveLoginEmail();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -63,13 +74,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void saveLoginEmail() {
+    protected void saveLoginEmail() {
         String email = editTextLoginName.getText().toString();
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("DefaultEmail", email);
         editor.apply();
         Log.i(ACTIVITY_NAME, "Saved email: " + email + " to SharedPreferences");
+    }
+
+    public static boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
     }
 
     @Override

@@ -3,11 +3,13 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,19 +17,30 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
     private static final String ACTIVITY_NAME = "MainActivity";
     private static final int REQUEST_CODE = 10;
-
+    private Intent intent;
     private Button button;
+    private Button button2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(ACTIVITY_NAME, "onCreate");
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button2);
+        button2 = findViewById(R.id.button3);
+
         button.setOnClickListener(v->{
-            Intent intent = new Intent(MainActivity.this, ListItemsActivity.class);
+            Log.i(ACTIVITY_NAME, "User clicked Start List Item");
+            intent = new Intent(MainActivity.this, ListItemsActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        });
+
+        button2.setOnClickListener(v->{
+            Log.i(ACTIVITY_NAME, "User clicked Start Chat");
+            intent = new Intent(MainActivity.this, ChatWindow.class);
             startActivityForResult(intent, REQUEST_CODE);
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

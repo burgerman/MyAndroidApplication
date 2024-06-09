@@ -3,6 +3,7 @@
     <string name="app_name">Assignment 2</string>
     <string name="hello_message">Hello World!</string>
     <string name="buttonText">I\'m a button</string>
+    <string name="buttonText2">Start Chat</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="login_hint">login name</string>
@@ -14,4 +15,5 @@
     <string name="cancel">Cancel</string>
     <string name="dialog_message">End activity?</string>
     <string name="dialog_title">Finish Activity</string>
+    <string name="send">send</string>
 </resources>
