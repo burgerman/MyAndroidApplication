@@ -64,10 +64,10 @@ public class LoginActivity extends AppCompatActivity {
         if (username.isEmpty() || password.isEmpty()) {
             viewError.setText("Either username or password can't be empty");
             viewError.setVisibility(View.VISIBLE);
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+        } else if (!isValidEmail(username)) {
             viewError.setText("Invalid email address");
             viewError.setVisibility(View.VISIBLE);
-        } else if(Patterns.EMAIL_ADDRESS.matcher(username).matches()){
+        } else if(isValidEmail(username)){
             saveLoginEmail();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
