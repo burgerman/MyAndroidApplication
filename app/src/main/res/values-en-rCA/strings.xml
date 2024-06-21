@@ -16,4 +16,14 @@
     <string name="dialog_message">End activity?</string>
     <string name="dialog_title">Finish Activity</string>
     <string name="send">send</string>
+    <string name="toolbarButtonText">Test Toolbar</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="pick_color">Pick a color</string>
+    <string name="go_back">Do you want to go back?</string>
+    <string name="positive_button">Yes</string>
+    <string name="negative_button">No</string>
+    <string name="new_message">New Message</string>
 </resources>

@@ -15,18 +15,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/buttonText"
         android:text="@string/buttonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/test_view"
-        app:layout_constraintVertical_bias="0.3"
-        android:contentDescription="@string/buttonText" />
+        app:layout_constraintTop_toBottomOf="@id/test_view" />
 
     <Button
         android:id="@+id/button3"
@@ -39,5 +40,18 @@
         app:layout_constraintVertical_bias="0.3"
         android:contentDescription="@string/buttonText2"
         android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/test_toolbar_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/toolbarButtonText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button3"
+        android:contentDescription="@string/toolbarButtonText"
+        app:layout_constraintVertical_bias="0.3"
+        android:layout_marginTop="16dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

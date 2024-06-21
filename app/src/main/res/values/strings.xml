@@ -15,4 +15,15 @@
     <string name="dialog_message">结束对话吗?</string>
     <string name="dialog_title">结束会话</string>
     <string name="send">发送</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">第一分页</string>
+    <string name="second_fragment_label">第二分页</string>
+    <string name="next">下一步</string>
+    <string name="previous">前一步</string>
+    <string name="toolbarButtonText">测试工具栏</string>
+    <string name="pick_color">选个颜色</string>
+    <string name="go_back">你想要返回吗?</string>
+    <string name="positive_button">是</string>
+    <string name="negative_button">否</string>
+    <string name="new_message">新消息</string>
 </resources>
