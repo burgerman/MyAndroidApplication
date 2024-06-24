@@ -28,6 +28,7 @@ class MainActivity extends AppCompatActivity {
     - Intent intent
     - Button button
     - Button button2
+    - Button button3
 
     + void onCreate(Bundle savedInstanceState)
     + void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -36,6 +37,18 @@ class MainActivity extends AppCompatActivity {
     + void onPause()
     + void onStop()
     + void onDestroy()
+}
+
+class TestToolbar extends AppCompatActivity {
+    - static final String ACTIVITY_NAME = "TestToolbar"
+    - Toolbar toolbar
+    - FloatingActionButton fab
+    - String snackbarMsg
+    + void onCreate(savedInstanceState: Bundle)
+    + boolean onCreateOptionsMenu(m: Menu)
+    + boolean onOptionsItemSelected(mi: MenuItem)
+    + void goDialogs()
+    + void goCustomDialog()
 }
 
 class ListItemsActivity extends AppCompatActivity {
