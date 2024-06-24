@@ -36,10 +36,20 @@ public class MainActivityInstrumentedTest {
     }
 
     @Test
+    public void testToolbarButton() {
+        init();
+        Espresso.onView(ViewMatchers.withId(R.id.test_toolbar_button)).perform(ViewActions.click());
+        intended(hasComponent(TestToolbar.class.getName()));
+        release();
+    }
+
+    @Test
     public void testUIElements() {
         Espresso.onView(ViewMatchers.withId(R.id.button2))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onView(ViewMatchers.withId(R.id.button3))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.test_toolbar_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }
