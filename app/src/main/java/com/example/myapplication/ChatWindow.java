@@ -1,6 +1,10 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,8 +29,10 @@ public class ChatWindow extends AppCompatActivity {
     private EditText textInput;
     private Button sendButton;
     private ArrayList<String> msgs;
-
     private ChatAdapter chatAdapter;
+    private ChatDatabaseHelper chatDatabaseHelper;
+    private SQLiteDatabase sqLiteDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +49,37 @@ public class ChatWindow extends AppCompatActivity {
         msgs = new ArrayList<>();
         chatAdapter = new ChatAdapter(this);
         listView.setAdapter(chatAdapter);
+
+        chatDatabaseHelper = new ChatDatabaseHelper(this);
+        sqLiteDatabase = chatDatabaseHelper.getWritableDatabase();
+
+        Cursor cursor = sqLiteDatabase.query(ChatDatabaseHelper.TABLE_NAME, null,null,null,null,null, null);
+
+
+        int messageIndex = cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
+        if (messageIndex != -1 && cursor.moveToFirst()) {
+            do {
+                String message = cursor.getString(messageIndex);
+                Log.i(ACTIVITY_NAME, "SQL MESSAGE: " + message);
+                msgs.add(message);
+            } while (cursor.moveToNext());
+        }
+        Log.i(ACTIVITY_NAME, "Cursor’s column count =" + cursor.getColumnCount());
+        for (int columnIndex = 0; columnIndex < cursor.getColumnCount(); columnIndex++) {
+            Log.i(ACTIVITY_NAME, "Column Name: " + cursor.getColumnName(columnIndex));
+        }
+
+        cursor.close();
         sendButton.setOnClickListener(v->{
             String msg = textInput.getText().toString().trim();
             if(!msg.isEmpty()) {
                 msgs.add(msg);
                 chatAdapter.notifyDataSetChanged();
                 textInput.setText("");
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(ChatDatabaseHelper.KEY_MESSAGE, msg);
+                sqLiteDatabase.insert(ChatDatabaseHelper.TABLE_NAME, null, contentValues);
             }
 
         });
@@ -101,8 +132,9 @@ public class ChatWindow extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        sqLiteDatabase.close();
         Log.i(ACTIVITY_NAME, "onDestroy");
-        print("Call onDestroy");
+        print("Call onDestroy and DB Close");
     }
 
     private class ChatAdapter extends ArrayAdapter<String> {
