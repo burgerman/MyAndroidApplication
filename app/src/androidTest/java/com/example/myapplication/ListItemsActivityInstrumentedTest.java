@@ -4,13 +4,19 @@ import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static org.hamcrest.CoreMatchers.notNullValue;
+
+import android.content.Intent;
+import android.provider.MediaStore;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,13 +29,13 @@ public class ListItemsActivityInstrumentedTest {
             new ActivityScenarioRule<>(ListItemsActivity.class);
 
 
-
     @Test
     public void testImageButtonClick() {
         init();
         Espresso.onView(ViewMatchers.withId(R.id.imageButton))
                 .perform(ViewActions.click());
-        intended(hasAction(android.provider.MediaStore.ACTION_IMAGE_CAPTURE));
+        intended(hasAction(Intent.ACTION_PICK));
+        intended(hasData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
         release();
     }
 

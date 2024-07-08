@@ -68,6 +68,7 @@ public class ChatWindowInstrumentedTest {
 
     @Test
     public void testSendMessageWithDB() {
+        chatDatabaseHelper.onUpgrade(sqLiteDatabase, 1, 2);
         // Initially get the count of messages
         int initialCount = getListViewCount();
 
