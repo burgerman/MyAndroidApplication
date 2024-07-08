@@ -20,7 +20,7 @@ public class TestToolbar extends AppCompatActivity {
     private Toolbar toolbar;
     private FloatingActionButton fab;
 
-    private String snackbarMsg;
+    private String snackbarMsg = "You selected item 1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,6 @@ public class TestToolbar extends AppCompatActivity {
         if (itemID == R.id.option1) {
             Log.d(TAG, "Option 1 selected");
             View view = findViewById(R.id.toolbar);
-            snackbarMsg = "You selected item 1";
             Snackbar.make(view, snackbarMsg, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return true;

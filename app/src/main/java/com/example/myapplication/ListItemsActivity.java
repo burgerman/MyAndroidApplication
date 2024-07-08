@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -17,6 +18,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+
+import java.io.IOException;
 
 public class ListItemsActivity extends AppCompatActivity {
     private static final String ACTIVITY_NAME = "ListItemsActivity";
@@ -39,14 +42,15 @@ public class ListItemsActivity extends AppCompatActivity {
         imageButton = findViewById(R.id.imageButton);
         mySwitch = findViewById(R.id.switch1);
         checkBox = findViewById(R.id.checkBox);
-        imageButton.setOnClickListener(v-> {
-            Intent picIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if(picIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(picIntent, REQUEST_IMAGE);
-            } else {
-                Log.i(ACTIVITY_NAME, "No Camera Found");
-            }
-        });
+//        imageButton.setOnClickListener(v-> {
+//            Intent picIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            if(picIntent.resolveActivity(getPackageManager()) != null) {
+//                startActivityForResult(picIntent, REQUEST_IMAGE);
+//            } else {
+//                Log.i(ACTIVITY_NAME, "No Camera Found");
+//            }
+//        });
+        imageButton.setOnClickListener(v-> openImagePicker());
         mySwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> setOnCheckedChanged(isChecked));
         checkBox.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if(isChecked) {
@@ -65,6 +69,11 @@ public class ListItemsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_IMAGE);
     }
 
     private void setOnCheckedChanged(boolean isChecked) {
@@ -102,13 +111,28 @@ public class ListItemsActivity extends AppCompatActivity {
                 .show();
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            imageButton.setImageBitmap(imageBitmap);
+//        }
+//    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageButton.setImageBitmap(imageBitmap);
+        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                imageButton.setImageBitmap(bitmap);
+                Toast.makeText(this, "Image updated", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
