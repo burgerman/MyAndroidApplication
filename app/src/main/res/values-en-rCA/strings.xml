@@ -26,4 +26,8 @@
     <string name="positive_button">Yes</string>
     <string name="negative_button">No</string>
     <string name="new_message">New Message</string>
+    <string name="weatherForecast">Weather Forecast</string>
+    <string name="current_temp">Current Temperature: </string>
+    <string name="min_temp">Min Temperature: </string>
+    <string name="max_temp">Max Temperature: </string>
 </resources>

@@ -26,4 +26,8 @@
     <string name="positive_button">是</string>
     <string name="negative_button">否</string>
     <string name="new_message">新消息</string>
+    <string name="weatherForecast">天气预报</string>
+    <string name="current_temp">当前温度: </string>
+    <string name="min_temp">最低温度: </string>
+    <string name="max_temp">最高温度: </string>
 </resources>

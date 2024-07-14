@@ -13,8 +13,8 @@ public class MainActivity extends AppCompatActivity {
     private Intent intent;
     private Button button;
     private Button button2;
-
     private Button button3;
+    private Button button4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.button2);
         button2 = findViewById(R.id.button3);
         button3 = findViewById(R.id.test_toolbar_button);
+        button4 = findViewById(R.id.weather_forecast_button);
         button.setOnClickListener(v->{
             Log.i(ACTIVITY_NAME, "User clicked Start List Item");
             intent = new Intent(MainActivity.this, ListItemsActivity.class);
@@ -38,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
         button3.setOnClickListener(v->{
             Log.i(ACTIVITY_NAME, "User clicked Start Test Toolbar");
             intent = new Intent(MainActivity.this, TestToolbar.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        });
+        button4.setOnClickListener(v->{
+            Log.i(ACTIVITY_NAME, "User clicked Start Weather Forecast");
+            intent = new Intent(MainActivity.this, WeatherForecast.class);
             startActivityForResult(intent, REQUEST_CODE);
         });
     }
