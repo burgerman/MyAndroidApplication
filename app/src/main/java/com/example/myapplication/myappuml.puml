@@ -77,7 +77,10 @@ class ChatWindow extends AppCompatActivity {
     - EditText textInput
     - Button sendButton
     - ArrayList<String> msgs
+    - ChatDatabaseHelper chatDatabaseHelper
+    - SQLiteDatabase sqLiteDatabase
     - ChatAdapter chatAdapter
+    - Cursor cursor
 
     + ListView getListView()
     + void setListView(ListView listView)
@@ -92,6 +95,7 @@ class ChatWindow extends AppCompatActivity {
     + void onCreate(Bundle savedInstanceState)
     + boolean onOptionsItemSelected(MenuItem item)
     - void print(String message)
+    + void onActivityResult(int requestCode, int resultCode, Intent data)
     + void onResume()
     + void onStart()
     + void onPause()
@@ -102,10 +106,11 @@ class ChatWindow extends AppCompatActivity {
 class ChatAdapter extends ArrayAdapter<String> {
     - Context context
     - ArrayList<String> messages
-
-    + ChatAdapter(Context ctx)
+    - Cursor cursor
+    + ChatAdapter(Context ctx, Cursor cursor)
     + int getCount()
     + String getItem(int position)
+    + long getItemId(int position)
     + View getView(int position, View convertView, ViewGroup parent)
 }
 

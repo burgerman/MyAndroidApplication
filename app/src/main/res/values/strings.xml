@@ -30,4 +30,6 @@
     <string name="current_temp">当前温度: </string>
     <string name="min_temp">最低温度: </string>
     <string name="max_temp">最高温度: </string>
+    <string name="messagehere">消息</string>
+    <string name="delete_this_message">删除该消息</string>
 </resources>

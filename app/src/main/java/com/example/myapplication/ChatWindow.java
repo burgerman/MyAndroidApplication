@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ public class ChatWindow extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     private ChatDatabaseHelper chatDatabaseHelper;
     private SQLiteDatabase sqLiteDatabase;
-
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +44,23 @@ public class ChatWindow extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        FrameLayout frameLayout;
+        boolean frameExist = findViewById(R.id.frame_layout)!=null;
+        if(frameExist) {
+            frameLayout = findViewById(R.id.frame_layout);
+            Log.i(ACTIVITY_NAME, "frame layout loaded");
+        }
         listView = findViewById(R.id.chat_window_list_view);
         textInput = findViewById(R.id.chat_window_edit_text);
         sendButton = findViewById(R.id.send_button);
         msgs = new ArrayList<>();
-        chatAdapter = new ChatAdapter(this);
-        listView.setAdapter(chatAdapter);
 
         chatDatabaseHelper = new ChatDatabaseHelper(this);
         sqLiteDatabase = chatDatabaseHelper.getWritableDatabase();
 
-        Cursor cursor = sqLiteDatabase.query(ChatDatabaseHelper.TABLE_NAME, null,null,null,null,null, null);
-
+        cursor = sqLiteDatabase.query(ChatDatabaseHelper.TABLE_NAME, null,null,null,null,null, null);
+        chatAdapter = new ChatAdapter(this, cursor);
+        listView.setAdapter(chatAdapter);
 
         int messageIndex = cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
         if (messageIndex != -1 && cursor.moveToFirst()) {
@@ -69,7 +75,6 @@ public class ChatWindow extends AppCompatActivity {
             Log.i(ACTIVITY_NAME, "Column Name: " + cursor.getColumnName(columnIndex));
         }
 
-        cursor.close();
         sendButton.setOnClickListener(v->{
             String msg = textInput.getText().toString().trim();
             if(!msg.isEmpty()) {
@@ -80,9 +85,50 @@ public class ChatWindow extends AppCompatActivity {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(ChatDatabaseHelper.KEY_MESSAGE, msg);
                 sqLiteDatabase.insert(ChatDatabaseHelper.TABLE_NAME, null, contentValues);
+                cursor.requery();
             }
 
         });
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            if (frameExist) {
+                MessageFragment messageFragment = new MessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("message", msgs.get(position));
+                bundle.putLong("id", id);
+                messageFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, messageFragment)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                Intent intent = new Intent(ChatWindow.this, MessageDetails.class);
+                intent.putExtra("message", msgs.get(position));
+                intent.putExtra("id", id);
+                startActivityForResult(intent, 1);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            long idToDelete = data.getLongExtra("id", -1);
+            if (idToDelete != -1) {
+                sqLiteDatabase.delete(ChatDatabaseHelper.TABLE_NAME, ChatDatabaseHelper.KEY_ID + " = ?", new String[]{String.valueOf(idToDelete)});
+                cursor.requery();
+                msgs.clear();
+                int messageIndex = cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
+                if (messageIndex != -1 && cursor.moveToFirst()) {
+                    do {
+                        String message = cursor.getString(messageIndex);
+                        msgs.add(message);
+                    } while (cursor.moveToNext());
+                }
+                chatAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override
@@ -138,12 +184,17 @@ public class ChatWindow extends AppCompatActivity {
     }
 
     private class ChatAdapter extends ArrayAdapter<String> {
+
+        private View resultView;
         private Context context;
         private ArrayList<String> messages;
-        public ChatAdapter(Context ctx) {
+        private Cursor cursor;
+
+        public ChatAdapter(Context ctx, Cursor cursor) {
             super(ctx, 0, msgs);
             context = ctx;
             messages = msgs;
+            this.cursor = cursor;
         }
 
         @Override
@@ -157,17 +208,24 @@ public class ChatWindow extends AppCompatActivity {
         }
 
         @Override
+        public long getItemId(int position) {
+            if (cursor.moveToPosition(position)) {
+                return cursor.getLong(cursor.getColumnIndexOrThrow(ChatDatabaseHelper.KEY_ID));
+            }
+            return -1;
+        }
+
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = ChatWindow.this.getLayoutInflater();
-            View result = null;
             if (position % 2 == 0) {
-                result = inflater.inflate(R.layout.chat_row_incoming, null);
+                resultView = inflater.inflate(R.layout.chat_row_incoming, null);
             } else {
-                result = inflater.inflate(R.layout.chat_row_outgoing, null);
+                resultView = inflater.inflate(R.layout.chat_row_outgoing, null);
             }
-            TextView msg = result.findViewById(R.id.message_text);
+            TextView msg = resultView.findViewById(R.id.message_text);
             msg.setText(getItem(position));
-            return result;
+            return resultView;
         }
     }
 }
